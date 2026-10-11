@@ -32,7 +32,7 @@ def depositar(usuario):
             
         else:
             while True:
-                escolha = input(f'\nDeseja depositar R$ {valor_deposito:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não", "nao")
+                escolha = input(f'\nDeseja depositar R$ {valor_deposito:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
                 if escolha == "sim":
                     confirmar_senha = input("\nOk, verifique sua senha: ")
@@ -74,31 +74,44 @@ def depositar(usuario):
                     else: 
                         conexao.close()
                         print("\nSenha incorreta. Depósito cancelado.")
-                        escolha = input("""\nO que deseja fazer?
-                    
-    1 - Depositar outro valor
-    2 - Voltar ao menu
 
-""")
+                        while True:
+                            escolha = input("""\nO que deseja fazer?
+                        
+        1 - Depositar outro valor
+        2 - Voltar ao menu
+
+        """)
+                            if escolha == "1":
+                                break
+
+                            elif escolha == "2":
+                                return
+
+                            else:
+                                print("\nDigite um valor válido.")
+                                continue
+
+
+                elif escolha == "nao":
+                    
+                    while True:
+                        escolha = input("""\nOk, o que deseja fazer?
+                            
+        1 - Depositar outro valor
+        2 - Voltar ao menu
+
+    """)
                         if escolha == "1":
                             break
-
+        
                         elif escolha == "2":
                             return
 
-                elif escolha == "nao":
-                    escolha = input("""\nOk, o que deseja fazer?
-                        
-    1 - Depositar outro valor
-    2 - Voltar ao menu
-
-""")
-                    if escolha == "1":
-                        break
-    
-                    elif escolha == "2":
-                        return
-
+                        else:
+                            print("\nDigite um valor válido.")
+                            continue
+                    
                 else:
                     print('Digite "Sim" ou "Não".')
                     continue
@@ -108,7 +121,7 @@ def sacar(usuario):
     saldo = obter_saldo(usuario)
     while True:
         try:
-            valor_saque = float(input("\n=== Saque ===\nDigite o valor que você deseja sacar: "))
+            valor_saque = float(input("\n=== Saque ===\nDigite o valor que você deseja sacar: ")).strip()
 
         except ValueError:
             print("\nDigite um valor válido.")
@@ -124,7 +137,7 @@ def sacar(usuario):
 
         else:
             while True:
-                escolha = input(f'\nDeseja sacar R$ {valor_saque:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não","nao")
+                escolha = input(f'\nDeseja sacar R$ {valor_saque:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não","nao").strip()
 
                 if escolha == "sim":
                     confirmar_senha = input("\nOk, verifique sua senha: ")
@@ -162,33 +175,46 @@ def sacar(usuario):
                     else:
                         conexao.close() 
                         print("\nSenha incorreta. Saque cancelado.")
-                        escolha = input("""\nO que deseja fazer?
-                                                
-    1 - Sacar outro valor
-    2 - Voltar ao menu
                         
-""")
+                        while True:
+                            
+                            escolha = input("""\nO que deseja fazer?
+                                                    
+        1 - Sacar outro valor
+        2 - Voltar ao menu
+                            
+        """)
+                            if escolha == "1":
+                                break
+                                
+                            elif escolha == "2":
+                                return
+
+                            else:
+                                print("\nDigite um valor válido.")
+                                continue
+
+                elif escolha == "nao":
+                    
+                    while True:
+                        escolha = input("""\nOk, o que deseja fazer?
+                                            
+        1 - Sacar outro valor
+        2 - Voltar ao menu
+                    
+    """)
                         if escolha == "1":
                             break
                             
                         elif escolha == "2":
                             return
-
-                elif escolha == "nao":
-                    escolha = input("""\nOk, o que deseja fazer?
-                                        
-    1 - Sacar outro valor
-    2 - Voltar ao menu
-                
-""")
-                    if escolha == "1":
-                        break
-                        
-                    elif escolha == "2":
-                        return
-                
+                    
+                        else:
+                            print("\nDigite um valor válido.")
+                            continue
+            
                 else:
-                    print('Digite "Sim" ou "Não".')
+                    print('\nDigite "Sim" ou "Não".')
                     continue
 
 def transferir(usuario):
@@ -196,7 +222,7 @@ def transferir(usuario):
     saldo = obter_saldo(usuario)
     while True:
         voltar_para_nome = False
-        destinatario = input("\n=== Transferência ===\nDigite o nome de usuario da pessoa que você deseja enviar a transferência: ")
+        destinatario = input("\n=== Transferência ===\nDigite o nome de usuario da pessoa que você deseja enviar a transferência: ").strip()
 
         if destinatario == usuario:
             print("\nVocê não pode efetuar uma transferência para si mesmo.")
@@ -235,7 +261,7 @@ def transferir(usuario):
 
                     else:
                         while True:
-                            escolha = input(f'\nDeseja transferir R$ {valor_transferencia:,.2f} para {partes[0]} {partes[-1][0]}.? Digite "Sim" ou "Não": ').lower().replace("não","nao")
+                            escolha = input(f'\nDeseja transferir R$ {valor_transferencia:,.2f} para {partes[0]} {partes[-1][0]}.? Digite "Sim" ou "Não": ').lower().replace("não","nao").strip()
 
                             if escolha == "sim":
                                 confirmar_senha = input("\nOk, verifique sua senha: ")
@@ -282,42 +308,54 @@ def transferir(usuario):
                                 else: 
                                     conexao.close()
                                     print("\nSenha incorreta. Transferência cancelado.")
-                                    escolha = input("""\nO que deseja fazer?
-                    
+                                    
+                                    while True:
+                                        escolha = input("""\nO que deseja fazer?
+                        
     1 - Transferir outro valor
     2 - Voltar ao menu
 
 """)
-                                    if escolha == "1":
-                                        break
+                                        if escolha == "1":
+                                            break
 
-                                    elif escolha == "2":
-                                        return
+                                        elif escolha == "2":
+                                            return
+
+                                        else:
+                                            print("\nDigite um valor válido.")
+                                            continue
 
                             elif escolha == "nao":
-                                escolha = input("""\nOk, o que deseja fazer?
-                        
-    1 - Trocar o valor
-    2 - Trocar o destinatário
-    3 - Voltar ao menu
-    
-""")
-                                if escolha == "1":
-                                    break   
+                                
+                                while True:
+                                    escolha = input("""\nOk, o que deseja fazer?
+                            
+        1 - Trocar o valor
+        2 - Trocar o destinatário
+        3 - Voltar ao menu
+        
+    """)
+                                    if escolha == "1":
+                                        break   
 
-                                elif escolha == "2":
-                                    voltar_para_nome = True
-                                    break
-                    
-                                elif escolha == "3":
-                                    return
+                                    elif escolha == "2":
+                                        voltar_para_nome = True
+                                        break
+                        
+                                    elif escolha == "3":
+                                        return
+
+                                    else:
+                                        print("\nDigite um valor válido.")
+                                    continue
 
                             else:
-                                print('Digite "Sim" ou "Não".')
+                                print('\nDigite "Sim" ou "Não".')
                                 continue
 
-                        if voltar_para_nome:
-                            break
+                            if voltar_para_nome:
+                                break
 
                 except ValueError:
                     print("\nDigite um valor válido.")
@@ -443,7 +481,7 @@ Digite sua senha: """)
 
 def sair(usuario):
     while True:
-        confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao")
+        confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
         if confirmacao == "sim":
             print("\nVocê saiu!")

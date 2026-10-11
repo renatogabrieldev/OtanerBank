@@ -8,7 +8,7 @@ def cadastrar_usuario():
 O nome de usuário devem incluir de 3 a 20 caracteres e podem incluir letras, números, sublinhados e pontos.""")
     
     while True:
-        usuario = input("\nDigite o nome de usuario: ").lower()
+        usuario = input("\nDigite o nome de usuario: ").lower().strip()
 
         if len(usuario) < 3 or len(usuario) > 20:
             print("O nome de usuário deve ter entre 3 a 20 caractere.")
@@ -72,7 +72,7 @@ Você deve inserir seu primeiro e segundo nome. Ele eve conter apenas letras."""
             print("\nDigite também seu segundo nome.")
             continue
 
-        elif len(partes[1]) < 3:
+        elif len(partes[-1]) < 3:
             print("\nSeu segundo nome também deve conter pelo menos 3 caracteres.")
             continue
             
@@ -109,7 +109,7 @@ A senha deve ter pelo menos 8 caracteres, contendo letras maiúsculas, minúscul
         confirmar_senha = input("Confirme sua senha: ")
 
         if confirmar_senha != senha:
-            print("A senhas precisam ser iguais.")
+            print("A senhas não correspondem.")
             continue
 
         return hash_senha

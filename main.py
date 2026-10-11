@@ -46,7 +46,7 @@ while True:
 
         while True:
 
-            quer_fz_login = input('\nDeseja realizar login agora? Digite "Sim" ou "Não": ').lower().replace("não", "nao")
+            quer_fz_login = input('\nDeseja realizar login agora? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
             if quer_fz_login == "sim":
                 resultado_login = login.fazer_login()
@@ -73,7 +73,7 @@ while True:
 
     elif escolha == 3:
 
-        confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao")
+        confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
         if confirmacao == "sim":
             print("\nVocê saiu!") 

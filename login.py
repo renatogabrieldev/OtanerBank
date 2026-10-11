@@ -10,7 +10,7 @@ Para realizar login, digite seu nome de usuário e sua senha. Você terá 5 tent
 === Tentativa {tentativa} ===""")
 
     while True:
-        usuario = input("\nDigite seu nome de usuário: ")
+        usuario = input("\nDigite seu nome de usuário: ").strip()
         senha = input("\nDigite sua senha: ")
 
         cod = senha.encode("utf-8")
