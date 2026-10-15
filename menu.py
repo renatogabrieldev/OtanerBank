@@ -20,7 +20,7 @@ def depositar(usuario):
     tipo =  "Depósito"
     while True:
         try:
-            valor_deposito = float(input("\n=== Depósito ===\nDigite o valor que você deseja depositar: "))
+            valor_deposito = float(input("\n=== Depósito ===\nDigite o valor que você deseja depositar: ").replace(",","."))
 
         except ValueError:
             print("\nDigite um valor válido.")
@@ -31,6 +31,7 @@ def depositar(usuario):
             continue
             
         else:
+            deposito_outro_valor = False
             while True:
                 escolha = input(f'\nDeseja depositar R$ {valor_deposito:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
@@ -69,7 +70,6 @@ def depositar(usuario):
                         database.salvar_extrato(usuario, tipo, valor_deposito, data, usuario_relacionado = None)
 
                         return
-                        
 
                     else: 
                         conexao.close()
@@ -78,11 +78,12 @@ def depositar(usuario):
                         while True:
                             escolha = input("""\nO que deseja fazer?
                         
-        1 - Depositar outro valor
-        2 - Voltar ao menu
+    1 - Depositar outro valor
+    2 - Voltar ao menu
 
-        """)
+""")
                             if escolha == "1":
+                                deposito_outro_valor = True
                                 break
 
                             elif escolha == "2":
@@ -91,18 +92,21 @@ def depositar(usuario):
                             else:
                                 print("\nDigite um valor válido.")
                                 continue
-
+            
+                if deposito_outro_valor:
+                    break
 
                 elif escolha == "nao":
                     
                     while True:
                         escolha = input("""\nOk, o que deseja fazer?
                             
-        1 - Depositar outro valor
-        2 - Voltar ao menu
+    1 - Depositar outro valor
+    2 - Voltar ao menu
 
-    """)
+""")
                         if escolha == "1":
+                            deposito_outro_valor = True
                             break
         
                         elif escolha == "2":
@@ -111,6 +115,9 @@ def depositar(usuario):
                         else:
                             print("\nDigite um valor válido.")
                             continue
+                    
+                if deposito_outro_valor:
+                    break
                     
                 else:
                     print('Digite "Sim" ou "Não".')
@@ -121,7 +128,7 @@ def sacar(usuario):
     saldo = obter_saldo(usuario)
     while True:
         try:
-            valor_saque = float(input("\n=== Saque ===\nDigite o valor que você deseja sacar: ")).strip()
+            valor_saque = float(input("\n=== Saque ===\nDigite o valor que você deseja sacar: ").replace(",","."))
 
         except ValueError:
             print("\nDigite um valor válido.")
@@ -136,6 +143,7 @@ def sacar(usuario):
                     continue
 
         else:
+            saque_outro_valor = False
             while True:
                 escolha = input(f'\nDeseja sacar R$ {valor_saque:,.2f}? Digite "Sim" ou "Não": ').lower().replace("não","nao").strip()
 
@@ -180,11 +188,12 @@ def sacar(usuario):
                             
                             escolha = input("""\nO que deseja fazer?
                                                     
-        1 - Sacar outro valor
-        2 - Voltar ao menu
-                            
-        """)
+    1 - Sacar outro valor
+    2 - Voltar ao menu
+                        
+""")
                             if escolha == "1":
+                                saque_outro_valor = True
                                 break
                                 
                             elif escolha == "2":
@@ -194,16 +203,20 @@ def sacar(usuario):
                                 print("\nDigite um valor válido.")
                                 continue
 
+                if saque_outro_valor:
+                    break
+
                 elif escolha == "nao":
                     
                     while True:
                         escolha = input("""\nOk, o que deseja fazer?
-                                            
-        1 - Sacar outro valor
-        2 - Voltar ao menu
-                    
-    """)
+                                        
+    1 - Sacar outro valor
+    2 - Voltar ao menu
+                
+""")
                         if escolha == "1":
+                            saque_outro_valor = True
                             break
                             
                         elif escolha == "2":
@@ -212,6 +225,9 @@ def sacar(usuario):
                         else:
                             print("\nDigite um valor válido.")
                             continue
+
+                if saque_outro_valor:
+                    break
             
                 else:
                     print('\nDigite "Sim" ou "Não".')
@@ -220,9 +236,10 @@ def sacar(usuario):
 def transferir(usuario):
     tipo = "Transferência"
     saldo = obter_saldo(usuario)
+    print("\n=== Transferência ===")
     while True:
         voltar_para_nome = False
-        destinatario = input("\n=== Transferência ===\nDigite o nome de usuario da pessoa que você deseja enviar a transferência: ").strip()
+        destinatario = input("\nDigite o nome de usuario da pessoa que você deseja enviar a transferência: ").strip()
 
         if destinatario == usuario:
             print("\nVocê não pode efetuar uma transferência para si mesmo.")
@@ -249,7 +266,7 @@ def transferir(usuario):
                 partes = nome.split()
 
                 try:
-                    valor_transferencia = float(input(f"\nDigite o valor que deseja transferir para {partes[0]} {partes[-1][0]}.: "))
+                    valor_transferencia = float(input(f"\nDigite o valor que deseja transferir para {partes[0]} {partes[-1][0]}.: ").replace(",","."))
 
                     if valor_transferencia <= 0:
                         print("Você não pode transferir um valor menor ou igual a R$ 0,00. Tente novamente.")
@@ -260,6 +277,7 @@ def transferir(usuario):
                         continue
 
                     else:
+                        transfere_outro_valor = False
                         while True:
                             escolha = input(f'\nDeseja transferir R$ {valor_transferencia:,.2f} para {partes[0]} {partes[-1][0]}.? Digite "Sim" ou "Não": ').lower().replace("não","nao").strip()
 
@@ -275,9 +293,9 @@ def transferir(usuario):
                                 (usuario,)
                                 )
 
-                                resultado = cursor.fetchone()
+                                resultado_senha = cursor.fetchone()
 
-                                if resultado and resultado[0] == hash_senha:
+                                if resultado_senha and resultado_senha[0] == hash_senha:
 
                                     saldo_atual = obter_saldo(usuario)
                                     novo_saldo = saldo_atual - valor_transferencia
@@ -317,6 +335,7 @@ def transferir(usuario):
 
 """)
                                         if escolha == "1":
+                                            transfere_outro_valor = True
                                             break
 
                                         elif escolha == "2":
@@ -326,17 +345,20 @@ def transferir(usuario):
                                             print("\nDigite um valor válido.")
                                             continue
 
+                                if transfere_outro_valor:
+                                    break
+
                             elif escolha == "nao":
-                                
                                 while True:
                                     escolha = input("""\nOk, o que deseja fazer?
-                            
-        1 - Trocar o valor
-        2 - Trocar o destinatário
-        3 - Voltar ao menu
-        
-    """)
+                        
+    1 - Transferir o valor
+    2 - Trocar o destinatário
+    3 - Voltar ao menu
+    
+""")
                                     if escolha == "1":
+                                        transfere_outro_valor = True
                                         break   
 
                                     elif escolha == "2":
@@ -350,12 +372,18 @@ def transferir(usuario):
                                         print("\nDigite um valor válido.")
                                     continue
 
+                                if transfere_outro_valor:
+                                    break
+                                
                             else:
                                 print('\nDigite "Sim" ou "Não".')
                                 continue
 
                             if voltar_para_nome:
                                 break
+
+                    if voltar_para_nome:
+                        break
 
                 except ValueError:
                     print("\nDigite um valor válido.")
