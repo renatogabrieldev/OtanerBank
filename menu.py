@@ -52,7 +52,6 @@ def depositar(usuario):
                     resultado = cursor.fetchone()
 
                     if resultado and resultado[0] == hash_senha:
-
                         saldo_atual = obter_saldo(usuario)
                         novo_saldo = saldo_atual + valor_deposito
 
@@ -445,7 +444,6 @@ def ver_extrato(usuario):
             continue
 
 def alterar_senha(usuario):
-
     while True:
         senha = input("""\n=== Alterar senha ===
 A senha deve ter pelo menos 8 caracteres, contendo letras maiúsculas, minúsculas, números e caracteres especiais, como !@#$%&*.
@@ -507,6 +505,56 @@ Digite sua senha: """)
                 print("Senha incorreta. Tente novamente!")
                 break
 
+def excluir_conta(usuario):
+    while True:
+        confirmacao = input('\nTem certeza que quer excluir sua conta? Essa ação não poderá ser desfeita. Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
+        
+        if confirmacao == "sim":
+            confirmar_senha = input("\nOk, verifique sua senha: ")
+            cod = confirmar_senha.encode("utf-8")
+            hash_senha = hashlib.sha256(cod).hexdigest()
+    
+            conexao = sqlite3.connect("banco_de_dados.db")
+            cursor = conexao.cursor()
+            conexao = sqlite3.connect("banco_de_dados.db")
+            cursor = conexao.cursor()
+
+            cursor.execute("SELECT senha FROM usuarios WHERE usuario = ?",
+                        (usuario,)
+            )
+
+            resultado = cursor.fetchone()
+
+            if resultado and resultado[0] == hash_senha:
+                conexao = sqlite3.connect("banco_de_dados.db")
+                cursor = conexao.cursor()
+            
+                cursor.execute("""DELETE FROM usuarios WHERE usuario = ?""",
+                (usuario,))
+            
+                conexao.commit()
+                conexao.close()
+
+                print("\nConta excluída com sucesso. Obrigado por usar OtanerBank.")
+                while True:
+                    enter = input("\nPressione Enter para entrar novamente. ")
+                    if enter == "":
+                        return True
+    
+                    else:
+                        continue
+        
+            else: 
+                print("\nSenha incorreta. Exclusão cancelada.")
+                return
+
+        elif confirmacao == "nao":
+            return
+            
+        else:
+            print('\nDigite apenas "Sim" ou "Não".')
+            continue
+
 def sair(usuario):
     while True:
         confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
@@ -540,6 +588,7 @@ O que deseja fazer?
     4 - Extrato
     5 - Alterar senha
     6 - Sair
+    7 - Excluir conta
 
 """))
 
@@ -557,10 +606,14 @@ O que deseja fazer?
                 
             elif escolha == 5:
                 alterar_senha(usuario)
-                
+            
             elif escolha == 6:
                 if sair(usuario):
                     return True
+
+            elif escolha == 7:
+                if excluir_conta(usuario):
+                    return
                 
             else:
                 print("\nDigite um valor válido.")

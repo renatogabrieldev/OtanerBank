@@ -39,13 +39,11 @@ while True:
         data = data.strftime("%d/%m/%Y às %H:%M:%S")
 
         database.salvar_extrato(usuario, tipo, data = data, valor = None, usuario_relacionado = None)
-
         database.salvar_dados(usuario, nome, senha)
 
         print("\nConta criada com sucesso!")
 
         while True:
-
             quer_fz_login = input('\nDeseja realizar login agora? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
             if quer_fz_login == "sim":
@@ -54,12 +52,11 @@ while True:
                 if resultado_login:
                     usuario_logado = resultado_login[1]
                     menu.menu(usuario_logado)
-
-                exit()
+                break
 
             elif quer_fz_login == "nao":
                 print("\nOk, obrigado por usar OtanerBank, volte quando quiser!")
-                exit()
+                break
 
             else:
                 print('\nDigite apenas "Sim" ou "Não".')
@@ -72,7 +69,6 @@ while True:
             menu.menu(usuario_logado)
 
     elif escolha == 3:
-
         confirmacao = input('\nDeseja realmente sair? Digite "Sim" ou "Não": ').lower().replace("não", "nao").strip()
 
         if confirmacao == "sim":
